@@ -111,7 +111,8 @@
 
     .card { background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border:1px solid var(--border); border-radius: 16px; overflow: clip; box-shadow: var(--shadow); transition: transform .18s ease, border-color .18s ease; }
     .card:hover { transform: translateY(-4px); border-color: rgba(125, 211, 252, .6); }
-    .card-media { aspect-ratio: 16/10; background: radial-gradient(400px 200px at 20% 10%, rgba(79,140,255,.25), transparent 60%), linear-gradient(135deg, #0c1626, #0a1220); display:grid; place-items:center; color: var(--muted); font-weight:700; letter-spacing:.06em; }
+    .card-media { aspect-ratio: 16/10; background: radial-gradient(400px 200px at 20% 10%, rgba(79,140,255,.25), transparent 60%), linear-gradient(135deg, #0c1626, #0a1220); display:grid; place-items:center; color: var(--muted); font-weight:700; letter-spacing:.06em; overflow: hidden; }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
     .card-body { padding: .9rem; display:grid; gap:.6rem; }
     .card-title { font-weight:800; }
     .stack { display:flex; flex-wrap: wrap; gap:.4rem; }
@@ -302,7 +303,9 @@
           <!-- Project 2 -->
           <article class="card reveal delay-1">
             <a href="img/digi-farm.jpg" aria-label="Digi‑Farm Platform (PHP/MySQL)">
-              <div class="card-media">Thumbnail</div>
+              <div class="card-media">
+                <img src="img/digi-farm.jpg" alt="Digi‑Farm Platform Screenshot" loading="lazy">
+              </div>
               <div class="card-body">
                 <h3 class="card-title">Digi‑Farm Platform (PHP/MySQL)</h3>
                 <p class="muted">Admin manages experts, inputs, services; farmers register, post products, submit enquiries.</p>
@@ -319,7 +322,9 @@
           <!-- Project 3 -->
           <article class="card reveal delay-2">
             <a href="img/hotel ms.jpg" aria-label="Hotel Management & Booking System">
-              <div class="card-media">Thumbnail</div>
+              <div class="card-media">
+                <img src="img/hotel ms.jpg" alt="Hotel Management System Screenshot" loading="lazy">
+              </div>
               <div class="card-body">
                 <h3 class="card-title">Hotel Management & Booking</h3>
                 <p class="muted">Room listings, availability, bookings, and admin workflows—built with clean, responsive UI.</p>
@@ -335,7 +340,9 @@
           <!-- Project 4 -->
           <article class="card reveal">
             <a href="img/finance.jpg" aria-label="Finance Management App (Jetpack Compose)">
-              <div class="card-media">Thumbnail</div>
+              <div class="card-media">
+                <img src="img/finance.jpg" alt="Finance App Screenshot" loading="lazy">
+              </div>
               <div class="card-body">
                 <h3 class="card-title">Finance App (Jetpack Compose + Room)</h3>
                 <p class="muted">Track loans and savings with offline‑first local storage and modern Android UI patterns.</p>
@@ -351,7 +358,9 @@
           <!-- Project 5 -->
           <article class="card reveal delay-1">
             <a href="img/attendance.jpg" aria-label="Attendance Module (MERN)">
-              <div class="card-media">Thumbnail</div>
+              <div class="card-media">
+                <img src="img/attendance.jpg" alt="Attendance Module Screenshot" loading="lazy">
+              </div>
               <div class="card-body">
                 <h3 class="card-title">Attendance Module (MERN)</h3>
                 <p class="muted">Calendar view, class/subject filters, pagination, and token‑based access control.</p>
@@ -367,7 +376,9 @@
           <!-- Project 6 -->
           <article class="card reveal delay-2">
             <a href="img/report.jpg" aria-label="Export & Reporting">
-              <div class="card-media">Thumbnail</div>
+              <div class="card-media">
+                <img src="img/report.jpg" alt="Reporting System Screenshot" loading="lazy">
+              </div>
               <div class="card-body">
                 <h3 class="card-title">Reporting & Exports</h3>
                 <p class="muted">Server‑side exports (PDF/Excel), printable views, and aggregate dashboard metrics.</p>
