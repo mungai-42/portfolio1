@@ -23,8 +23,41 @@
       --border: #1f2a37;
       --shadow: 0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.2);
     }
+    /* Light theme */
+    [data-theme="light"] {
+      --bg: #f7fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #2563eb;
+      --primary-ink: #ffffff;
+      --accent: #0891b2;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 10px 20px rgba(2,6,23,.08), 0 2px 6px rgba(2,6,23,.06);
+    }
+
+    /* Default dark theme */
+    [data-theme="dark"] {
+      --bg: #0b0f14;
+      --surface: #0f1722;
+      --text: #e6edf3;
+      --muted: #9fb0c0;
+      --primary: #4f8cff;
+      --primary-ink: #0a1220;
+      --accent: #22d3ee;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --ring: #7dd3fc;
+      --card: #0c1320;
+      --border: #1f2a37;
+      --shadow: 0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.2);
+    }
+
+    /* Auto theme based on system preference */
     @media (prefers-color-scheme: light) {
-      :root {
+      :root:not([data-theme]) {
         --bg: #f7fafc;
         --surface: #ffffff;
         --text: #0f172a;
@@ -242,6 +275,37 @@
       background: linear-gradient(90deg, var(--primary), var(--accent));
       width: 0%;
       transition: width 0.1s ease;
+    }
+    
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: fixed !important;
+      top: 20px !important;
+      right: 20px !important;
+      width: 50px !important;
+      height: 50px !important;
+      border-radius: 50% !important;
+      border: 1px solid var(--border) !important;
+      background: var(--surface) !important;
+      color: var(--text) !important;
+      cursor: pointer !important;
+      z-index: 1000 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 20px !important;
+      transition: all 0.3s ease !important;
+      box-shadow: var(--shadow) !important;
+    }
+    
+    .theme-toggle:hover {
+      transform: scale(1.1) !important;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--primary) !important;
+      outline-offset: 2px !important;
     }
   </style>
 </head>

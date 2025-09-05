@@ -19,6 +19,16 @@ class PortfolioApp {
         console.log('Portfolio App Initialized');
         this.updateYear();
         this.setupNavigation();
+        this.debugThemeToggle();
+    }
+
+    debugThemeToggle() {
+        // Debug function to check theme toggle
+        console.log('Theme toggle debug:', {
+            currentTheme: document.documentElement.getAttribute('data-theme'),
+            savedTheme: localStorage.getItem('theme'),
+            hasThemeToggle: document.querySelector('.theme-toggle') !== null
+        });
     }
 
     updateYear() {
@@ -370,7 +380,8 @@ class PortfolioApp {
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '20px',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            boxShadow: 'var(--shadow)'
         });
 
         document.body.appendChild(themeToggle);
@@ -380,16 +391,37 @@ class PortfolioApp {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
+            // Apply theme with smooth transition
+            document.documentElement.style.transition = 'all 0.3s ease';
             document.documentElement.setAttribute('data-theme', newTheme);
+            
+            // Update button icon
             themeToggle.innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
             
+            // Save to localStorage
             localStorage.setItem('theme', newTheme);
+            
+            // Remove transition after animation
+            setTimeout(() => {
+                document.documentElement.style.transition = '';
+            }, 300);
         });
 
-        // Load saved theme
+        // Load saved theme or default to dark
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         themeToggle.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
+        
+        // Add hover effect
+        themeToggle.addEventListener('mouseenter', () => {
+            themeToggle.style.transform = 'scale(1.1)';
+            themeToggle.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+        });
+        
+        themeToggle.addEventListener('mouseleave', () => {
+            themeToggle.style.transform = 'scale(1)';
+            themeToggle.style.boxShadow = 'var(--shadow)';
+        });
     }
 
     setupInteractiveCards() {
