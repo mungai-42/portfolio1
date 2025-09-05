@@ -226,14 +226,18 @@ class PortfolioApp {
             height: 100%;
             pointer-events: none;
             z-index: -1;
-            opacity: 0.6;
+            opacity: 0.8;
         `;
         
         document.body.appendChild(canvas);
         
         const ctx = canvas.getContext('2d');
         const particles = [];
-        const particleCount = 50;
+        const techShapes = [];
+        const particleCount = 80;
+        const shapeCount = 15;
+        let mouseX = 0;
+        let mouseY = 0;
 
         // Resize canvas
         const resizeCanvas = () => {
@@ -244,64 +248,224 @@ class PortfolioApp {
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Particle class
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Enhanced Particle class
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
-                this.opacity = Math.random() * 0.5 + 0.2;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = (Math.random() - 0.5) * 1.5;
+                this.size = Math.random() * 3 + 1;
+                this.opacity = Math.random() * 0.8 + 0.2;
+                this.pulseSpeed = Math.random() * 0.02 + 0.01;
+                this.pulsePhase = Math.random() * Math.PI * 2;
+                this.type = Math.random() > 0.5 ? 'circle' : 'square';
+                this.rotation = 0;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.02;
             }
 
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
+                this.pulsePhase += this.pulseSpeed;
+                this.rotation += this.rotationSpeed;
 
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                // Mouse interaction
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 150) {
+                    const force = (150 - distance) / 150;
+                    this.vx += (dx / distance) * force * 0.1;
+                    this.vy += (dy / distance) * force * 0.1;
+                }
+
+                // Boundary check with bounce
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.vx *= -1;
+                    this.x = Math.max(0, Math.min(canvas.width, this.x));
+                }
+                if (this.y < 0 || this.y > canvas.height) {
+                    this.vy *= -1;
+                    this.y = Math.max(0, Math.min(canvas.height, this.y));
+                }
+
+                // Damping
+                this.vx *= 0.99;
+                this.vy *= 0.99;
             }
 
             draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(79, 140, 255, ${this.opacity})`;
-                ctx.fill();
+                const pulseSize = this.size + Math.sin(this.pulsePhase) * 0.5;
+                const pulseOpacity = this.opacity + Math.sin(this.pulsePhase) * 0.2;
+                
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                
+                if (this.type === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, pulseSize, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(79, 140, 255, ${pulseOpacity})`;
+                    ctx.fill();
+                    
+                    // Glow effect
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = 'rgba(79, 140, 255, 0.5)';
+                    ctx.fill();
+                } else {
+                    ctx.fillStyle = `rgba(34, 211, 238, ${pulseOpacity})`;
+                    ctx.fillRect(-pulseSize/2, -pulseSize/2, pulseSize, pulseSize);
+                    
+                    // Glow effect
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = 'rgba(34, 211, 238, 0.5)';
+                    ctx.fillRect(-pulseSize/2, -pulseSize/2, pulseSize, pulseSize);
+                }
+                
+                ctx.restore();
             }
         }
 
-        // Create particles
+        // Tech Shape class for geometric elements
+        class TechShape {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 20 + 10;
+                this.rotation = 0;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.01;
+                this.opacity = Math.random() * 0.3 + 0.1;
+                this.type = ['triangle', 'hexagon', 'diamond'][Math.floor(Math.random() * 3)];
+                this.pulsePhase = Math.random() * Math.PI * 2;
+                this.pulseSpeed = Math.random() * 0.01 + 0.005;
+            }
+
+            update() {
+                this.rotation += this.rotationSpeed;
+                this.pulsePhase += this.pulseSpeed;
+            }
+
+            draw() {
+                const pulseSize = this.size + Math.sin(this.pulsePhase) * 5;
+                const pulseOpacity = this.opacity + Math.sin(this.pulsePhase) * 0.1;
+                
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.strokeStyle = `rgba(125, 211, 252, ${pulseOpacity})`;
+                ctx.lineWidth = 1;
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = 'rgba(125, 211, 252, 0.3)';
+                
+                ctx.beginPath();
+                
+                switch (this.type) {
+                    case 'triangle':
+                        ctx.moveTo(0, -pulseSize);
+                        ctx.lineTo(-pulseSize * 0.866, pulseSize * 0.5);
+                        ctx.lineTo(pulseSize * 0.866, pulseSize * 0.5);
+                        ctx.closePath();
+                        break;
+                    case 'hexagon':
+                        for (let i = 0; i < 6; i++) {
+                            const angle = (i * Math.PI) / 3;
+                            const x = Math.cos(angle) * pulseSize;
+                            const y = Math.sin(angle) * pulseSize;
+                            if (i === 0) ctx.moveTo(x, y);
+                            else ctx.lineTo(x, y);
+                        }
+                        ctx.closePath();
+                        break;
+                    case 'diamond':
+                        ctx.moveTo(0, -pulseSize);
+                        ctx.lineTo(pulseSize, 0);
+                        ctx.lineTo(0, pulseSize);
+                        ctx.lineTo(-pulseSize, 0);
+                        ctx.closePath();
+                        break;
+                }
+                
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        // Create particles and shapes
         for (let i = 0; i < particleCount; i++) {
             particles.push(new Particle());
+        }
+        
+        for (let i = 0; i < shapeCount; i++) {
+            techShapes.push(new TechShape());
         }
 
         // Animation loop
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
+            // Draw tech shapes first (background layer)
+            techShapes.forEach(shape => {
+                shape.update();
+                shape.draw();
+            });
+            
+            // Draw particles
             particles.forEach(particle => {
                 particle.update();
                 particle.draw();
             });
 
-            // Draw connections
+            // Draw dynamic connections with gradient effect
             particles.forEach((particle, i) => {
                 particles.slice(i + 1).forEach(otherParticle => {
                     const dx = particle.x - otherParticle.x;
                     const dy = particle.y - otherParticle.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
 
-                    if (distance < 100) {
+                    if (distance < 120) {
+                        const opacity = (1 - distance / 120) * 0.3;
+                        
+                        // Create gradient for connection line
+                        const gradient = ctx.createLinearGradient(
+                            particle.x, particle.y, 
+                            otherParticle.x, otherParticle.y
+                        );
+                        gradient.addColorStop(0, `rgba(79, 140, 255, ${opacity})`);
+                        gradient.addColorStop(0.5, `rgba(34, 211, 238, ${opacity})`);
+                        gradient.addColorStop(1, `rgba(79, 140, 255, ${opacity})`);
+                        
                         ctx.beginPath();
                         ctx.moveTo(particle.x, particle.y);
                         ctx.lineTo(otherParticle.x, otherParticle.y);
-                        ctx.strokeStyle = `rgba(79, 140, 255, ${0.1 * (1 - distance / 100)})`;
-                        ctx.lineWidth = 0.5;
+                        ctx.strokeStyle = gradient;
+                        ctx.lineWidth = 0.8;
                         ctx.stroke();
                     }
                 });
             });
+
+            // Draw data flow lines (moving lines that simulate data transmission)
+            if (Math.random() < 0.1) {
+                ctx.beginPath();
+                const startX = Math.random() * canvas.width;
+                const startY = Math.random() * canvas.height;
+                const endX = startX + (Math.random() - 0.5) * 200;
+                const endY = startY + (Math.random() - 0.5) * 200;
+                
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(endX, endY);
+                ctx.strokeStyle = `rgba(34, 211, 238, 0.4)`;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
 
             requestAnimationFrame(animate);
         };
