@@ -229,6 +229,30 @@
       margin: 0.5rem 0;
       color: var(--muted);
     }
+    
+    /* Social Links */
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    
+    .social-links .btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links .btn:hover {
+      transform: translateX(4px);
+      background: rgba(79, 140, 255, 0.1);
+    }
+    
+    .social-links .btn span {
+      font-size: 1.2rem;
+    }
 
     /* ---------- Skills ---------- */
     .skills { display:flex; flex-wrap:wrap; gap:.6rem; }
@@ -645,12 +669,18 @@
             <p class="muted" style="font-size:.9rem;">
           </form>
           <aside class="panel">
-            <h3 class="section-title" style="font-size:1.2rem;">Elsewhere</h3>
-            <p>
-              <a class="btn btn--ghost" href="#">GitHub</a>
-              <a class="btn btn--ghost" href="#">LinkedIn</a>
-              <a class="btn btn--ghost" href="#">WhatsApp</a>
-            </p>
+            <h3 class="section-title" style="font-size:1.2rem;">Connect With Me</h3>
+            <div class="social-links">
+              <a class="btn btn--ghost" href="https://github.com/mungai-42" target="_blank" rel="noopener noreferrer">
+                <span>📱</span> GitHub
+              </a>
+              <a class="btn btn--ghost" href="https://www.linkedin.com/in/samuel-mungai-00a1862a0" target="_blank" rel="noopener noreferrer">
+                <span>💼</span> LinkedIn
+              </a>
+              <a class="btn btn--ghost" href="https://wa.me/0791300101" target="_blank" rel="noopener noreferrer">
+                <span>💬</span> WhatsApp
+              </a>
+            </div>
           </aside>
         </div>
       </div>
