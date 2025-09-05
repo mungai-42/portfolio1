@@ -498,7 +498,7 @@ class PortfolioApp {
         if (!titleElement) return;
 
         const originalText = titleElement.innerHTML;
-        const textToType = "Hi, I'm Sam Mungai. I build reliable web & mobile apps.";
+        const textToType = "Hi, I'm Samuel Mungai. I build reliable web & mobile apps.";
         
         titleElement.innerHTML = '';
         titleElement.style.borderRight = '2px solid #4f8cff';
